@@ -380,29 +380,11 @@ namespace ToolkitM9
                         _token.Add(part);
                     }
                 }
-                //the final string which u can write to an file
-                string token = String.Join("\n", _token.ToString());
 
-                //Writing to the text file
-                using (StreamWriter sw = File.CreateText("./Data/token.txt"))
-                {
-                    sw.WriteLine(_token);
-                    sw.WriteLine(" ");
-                    sw.WriteLine(
-                        "PLEASE COPY EVERYTHING ABOVE THIS LINE!");
-                    sw.WriteLine(" ");
-                    sw.WriteLine("NEXT, SIGN IN TO YOUR HTC DEV ACCOUNT ON THE WEBPAGE THAT JUST OPENED!");
-                    sw.WriteLine(
-                        "IF YOU DO NOT HAVE ONE, CREATE AND ACTIVATE AN ACCOUNT WITH A VALID EMAIL ADDRESS THEN COME BACK TO THIS LINK:");
-                    sw.WriteLine("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
-                    sw.WriteLine(
-                        "THEN, PASTE THE TOKEN ID YOU JUST COPIED AT THE BOTTOM OF THE HTCDEV WEBPAGE!");
-                    sw.WriteLine("HIT SUBMIT, AND WAIT FOR THE EMAIL WITH THE UNLOCK BINARY FILE!");
-                    sw.WriteLine(" ");
-                    sw.WriteLine(
-                        "ONCE YOU HAVE RECEIVED THE UNLOCK FILE IN YOUR EMAIL, YOU CAN CONTINUE ON TO THE NEXT STEP!");
-                    sw.WriteLine("THIS FILE IS SAVED AS token.txt WITHIN THE DATA FOLDER IF NEEDED IN THE FUTURE!");
-                }
+                Console con = Console.Instance;
+                con.Add(Fastboot.Instance().OEM.GetIdentifierToken());
+                con.Show();
+
             }
         }
 
