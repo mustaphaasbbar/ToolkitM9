@@ -1,0 +1,16 @@
+﻿<Window x:Class="ToolkitM9.DeviceSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DeviceSelector" Height="134" Width="263" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="Resources/SK.ico">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Select your device:" VerticalAlignment="Top"/>
+        <ComboBox x:Name="Selector" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="229" Height="27" SelectedIndex="0">
+            <ComboBoxItem Content="AT&amp;T, International GSM"/>
+            <ComboBoxItem Content="Sprint"/>
+            <ComboBoxItem Content="T-Mobile"/>
+            <ComboBoxItem Content="Verizon"/>
+        </ComboBox>
+        <Button x:Name="btnOK" Content="OK" HorizontalAlignment="Left" Margin="164,63,0,0" VerticalAlignment="Top" Width="75" Click="btnOK_Click"/>
+
+    </Grid>
+</Window>

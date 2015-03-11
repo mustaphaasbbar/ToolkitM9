@@ -1,0 +1,12 @@
+﻿<Window x:Class="ToolkitM9.Load"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ToolkitM9" Height="156" Width="418" WindowStartupLocation="CenterScreen" Cursor="Wait" WindowStyle="None" ContentRendered="Window_ContentRendered" Loaded="Window_Loaded" Icon="Resources/SK.ico">
+    <Grid Background="#FF1C1C1C">
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="67" Width="225" Text="M9 Toolkit" FontFamily="Segoe UI Light" FontSize="48" Foreground="White"/>
+        <Image HorizontalAlignment="Left" Height="122" Margin="264,13,0,0" VerticalAlignment="Top" Width="122" Source="Resources/m9-gold.png" Stretch="UniformToFill"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,77,0,0" TextWrapping="Wrap" Text="Developed by: Squabbi @ XDA" VerticalAlignment="Top" Foreground="White"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,113,0,0" TextWrapping="Wrap" Text="Loading files... Please wait..." VerticalAlignment="Top" Foreground="White"/>
+
+    </Grid>
+</Window>

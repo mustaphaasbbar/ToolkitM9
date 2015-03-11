@@ -1,0 +1,45 @@
+#region Driver Check
+            //Check for CWM Drivers
+            try
+            {
+                if (!Directory.Exists(@"C:\Program Files (x86)\ClockworkMod\Universal Adb Driver\") &&
+                    !Directory.Exists(@"C:\Program Files\ClockworkMod\Universal Adb Driver"))
+                {
+                    if (Properties.Settings.Default["ADB"].ToString() == "Yes")
+                    {
+                        MessageBoxResult messageResult = MessageBox.Show("You are missing some ADB Drivers! They are required for your device to connect with your computer. Would you like to install them now?", "ADB Drivers", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                        if (messageResult == MessageBoxResult.Yes)
+                        {
+                            var download = new Downloader();
+                            ToolkitM9.Downloader.Settings.Selector = "ADB";
+                            download.ShowDialog();
+                        }
+                        else if (messageResult == MessageBoxResult.No)
+                        {
+                            MessageBoxResult messageResult2 = MessageBox.Show("Would you like to be reminded the next time you open the toolkit?", "Reminder?", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                            if (messageResult2 == MessageBoxResult.Yes)
+                            {
+                                Properties.Settings.Default["ADB"] = "Yes";
+                                Properties.Settings.Default.Save();
+                            }
+                            else if (messageResult2 == MessageBoxResult.No)
+                            {
+                                Properties.Settings.Default["ADB"] = "No";
+                                Properties.Settings.Default.Save();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                "An error has occured! A log file has been placed in the Logs folder. Please report this error, with the log file, in the toolkit thread on XDA. Links in the 'File' menu!",
+                "Critical Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                string fileDateTime = DateTime.Now.ToString("MMddyyyy") + "_" + DateTime.Now.ToString("HHmmss");
+                var file = new StreamWriter("./Data/Logs/" + fileDateTime + ".txt");
+                file.WriteLine(ex);
+                file.Close();
+            }
+
+            #endregion
