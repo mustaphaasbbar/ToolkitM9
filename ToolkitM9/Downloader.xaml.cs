@@ -62,7 +62,7 @@ namespace ToolkitM9
                         {
                             if (Settings.TwoRecoveries == true)
                             {
-                                tBStatus.Text = "Downloading recoveries for " + Settings.Device.ToString() + ".";
+                                tBStatus.Text = "Downloading recoveries for " + Settings.Device.ToString() + "...";
                                 client.DownloadFileAsync(
                                     new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/" + Settings.Device + "/recovery1.img"),
                                     "./Data/Recoveries/Recovery1.img");
