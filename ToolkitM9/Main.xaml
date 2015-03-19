@@ -92,8 +92,11 @@
                 </GroupBox>
                 <GroupBox Header="Commands" HorizontalAlignment="Left" Margin="549,10,0,0" VerticalAlignment="Top" Height="278" Width="246">
                     <Grid Margin="0">
-                        <ListBox HorizontalAlignment="Left" Height="83" Margin="10,10,0,0" VerticalAlignment="Top" Width="214">
-                            <ListBoxItem x:Name="lbiADB" Content="Reboot"/>
+                        <ListBox x:Name="lbADB" HorizontalAlignment="Left" Height="83" Margin="10,10,0,0" VerticalAlignment="Top" Width="214">
+                            <ListBoxItem x:Name="lbiReboot" Content="Reboot"/>
+                            <ListBoxItem x:Name="lbiRebootBoot" Content="Reboot Bootloader"/>
+                            <ListBoxItem x:Name="lbiPush" Content="Push"/>
+                            <ListBoxItem x:Name="lbiSideload" Content="Sideload"/>
                         </ListBox>
                     </Grid>
                 </GroupBox>
