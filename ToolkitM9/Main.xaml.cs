@@ -101,6 +101,7 @@ namespace ToolkitM9
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             tBSelectedDevice.Text = Properties.Settings.Default["Device"].ToString();
+            this.Title = this.Title + " Version: " + Assembly.GetEntryAssembly().GetName().Version;
         }
 
         private static string GetStringBetween(string source, string start, string end)
@@ -324,34 +325,50 @@ namespace ToolkitM9
             Process.Start("devmgmt.msc");
         }
 
-        private async void btnUnlockCode_Click(object sender, RoutedEventArgs e)
+        private void btnUnlockCode_Click(object sender, RoutedEventArgs e)
         {
-            tBUnlockStatus.Text = "Checking device...";
-            if (ADB.Instance().GetState() == IDDeviceState.BOOTLOADER)
+            IDDeviceState state = General.CheckDeviceState(ADB.Instance().DeviceID);
+            if (state == IDDeviceState.DEVICE)
             {
-                tBUnlockStatus.Text = "In Fastboot...";
+                tBUnlockStatus.Text = "Rebooting into the bootloader...";
+                ADB.Instance().Reboot(IDBoot.BOOTLOADER);
+
                 using (StreamWriter sw = File.CreateText("./Data/token.txt"))
                 {
-                    string rawReturn = await Task.Run(() => Fastboot.Instance().Execute("oem get_identifier_token").ToString());
-                    string rawToken = GetStringBetween(rawReturn, "< Please cut following message >\r\n", "\r\nOKAY");
-                    string cleanedToken = rawToken.Replace("(bootloader) ", "");
-                    sw.WriteLine(cleanedToken);
+                    List<string> _token = new List<string>();
+                    foreach (string line in Fastboot.Instance().OEM.GetIdentifierToken())
+                    {
+                        GroupCollection groups = Regex.Match(line, @"^\(bootloader\)\s{1,}(?<PART>.*?)$").Groups;
+                        string part = groups["PART"].Value;
+                        if (String.IsNullOrEmpty(part) == false && Regex.IsMatch(part, @"^<{1,}.*?>{1,}$") == false)
+                        {
+                            _token.Add(part);
+                        }
+                    }
+
+                    tBUnlockStatus.Text = "Collecting token...";
+
+                    //the final string which u can write to an file
+                    string token = String.Join("\n", _token.ToArray());
+                    sw.WriteLine(token.ToString());
+
                     sw.WriteLine(" ");
-                    sw.WriteLine(
-                        "PLEASE COPY EVERYTHING ABOVE THIS LINE!");
+                    sw.WriteLine("Please copy everything above this line!");
                     sw.WriteLine(" ");
-                    sw.WriteLine("NEXT, SIGN IN TO YOUR HTC DEV ACCOUNT ON THE WEBPAGE THAT JUST OPENED!");
-                    sw.WriteLine(
-                        "IF YOU DO NOT HAVE ONE, CREATE AND ACTIVATE AN ACCOUNT WITH A VALID EMAIL ADDRESS THEN COME BACK TO THIS LINK:");
+                    sw.WriteLine("Next, sign into your HTC Dev account on the webpage that just opened.");
+                    sw.WriteLine("If you do not have an account, create and activate an account with your email, then come back to this link.");
                     sw.WriteLine("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
-                    sw.WriteLine(
-                        "THEN, PASTE THE TOKEN ID YOU JUST COPIED AT THE BOTTOM OF THE HTCDEV WEBPAGE!");
-                    sw.WriteLine("HIT SUBMIT, AND WAIT FOR THE EMAIL WITH THE UNLOCK BINARY FILE!");
+                    sw.WriteLine("Then, paste the Token ID you just copied at the bottom of the webpage.");
+                    sw.WriteLine("Hit submit, and wait for the email with the unlock file.");
                     sw.WriteLine(" ");
-                    sw.WriteLine(
-                        "ONCE YOU HAVE RECEIVED THE UNLOCK FILE IN YOUR EMAIL, YOU CAN CONTINUE ON TO THE NEXT STEP!");
-                    sw.WriteLine("THIS FILE IS SAVED AS token.txt WITHIN THE DATA FOLDER IF NEEDED IN THE FUTURE!");
+                    sw.WriteLine("Once you have received the unlock file, download it and continue on to the next step, unlocking your bootloader.");
+                    sw.WriteLine("This file is saved as token.txt in the Data folder if you need it in the future.");
+                    sw.Close();
                 }
+
+                MessageBox.Show("The token is saved as token.txt in the Data folder. Further instructions are there. Please press OK to dismiss...");
+                //Process.Start("./Data/token.txt");
+
                 MessageBoxResult messageResult = MessageBox.Show("The package has been secured! Your unlock code is located '/Data/token.txt'. Would you like to reboot now?", "Token Obtained!", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if (messageResult == MessageBoxResult.Yes)
                 {
@@ -364,28 +381,73 @@ namespace ToolkitM9
                 {
                     Process.Start("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
                     Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "/Data/token.txt");
+                    MessageBox.Show("Next Step!", "Once you have recieved the unlock file from HTC, you can move on to the next step, unlocking your bootloader! More information is also avaliable in the /Data/token.txt file.", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else if (state == IDDeviceState.FASTBOOT)
+            {
+                using (StreamWriter sw = File.CreateText("./Data/token.txt"))
+                {
+                    List<string> _token = new List<string>();
+                    foreach (string line in Fastboot.Instance().OEM.GetIdentifierToken())
+                    {
+                        GroupCollection groups = Regex.Match(line, @"^\(bootloader\)\s{1,}(?<PART>.*?)$").Groups;
+                        string part = groups["PART"].Value;
+                        if (String.IsNullOrEmpty(part) == false && Regex.IsMatch(part, @"^<{1,}.*?>{1,}$") == false)
+                        {
+                            _token.Add(part);
+                        }
+                    }
+
+                    tBUnlockStatus.Text = "Collecting token...";
+
+                    //the final string which u can write to an file
+                    string token = String.Join("\n", _token.ToArray());
+                    sw.WriteLine(token.ToString());
+
+                    sw.WriteLine(" ");
+                    sw.WriteLine("Please copy everything above this line!");
+                    sw.WriteLine(" ");
+                    sw.WriteLine("Next, sign into your HTC Dev account on the webpage that just opened.");
+                    sw.WriteLine("If you do not have an account, create and activate an account with your email, then come back to this link.");
+                    sw.WriteLine("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
+                    sw.WriteLine("Then, paste the Token ID you just copied at the bottom of the webpage.");
+                    sw.WriteLine("Hit submit, and wait for the email with the unlock file.");
+                    sw.WriteLine(" ");
+                    sw.WriteLine("Once you have received the unlock file, download it and continue on to the next step, unlocking your bootloader.");
+                    sw.WriteLine("This file is saved as token.txt in the Data folder if you need it in the future.");
+                    sw.Close();
+                }
+
+                MessageBox.Show("The token is saved as token.txt in the Data folder. Further instructions are there. Please press OK to dismiss...");
+                //Process.Start("./Data/token.txt");
+
+                MessageBoxResult messageResult = MessageBox.Show("The package has been secured! Your unlock code is located '/Data/token.txt'. Would you like to reboot now?", "Token Obtained!", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (messageResult == MessageBoxResult.Yes)
+                {
+                    Fastboot.Instance().Reboot(IDBoot.REBOOT);
+                    Process.Start("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
+                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "/Data/token.txt");
                     MessageBox.Show("Next Step!", "Once you have recieved the unlock file from HTC, you can move on to the next step, unlocking your bootloader!", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                if (messageResult == MessageBoxResult.No)
+                {
+                    Process.Start("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
+                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "/Data/token.txt");
+                    MessageBox.Show("Next Step!", "Once you have recieved the unlock file from HTC, you can move on to the next step, unlocking your bootloader! More information is also avaliable in the /Data/token.txt file.", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else
             {
-                tBUnlockStatus.Text = "Obtaining Token";
-                List<string> _token = new List<string>();
-                foreach (string line in AndroidCtrl.Fastboot.Fastboot.Instance().OEM.GetIdentifierToken())
-                {
-                    GroupCollection groups = Regex.Match(line, @"^\(bootloader\)\s{1,}(?<PART>.*?)$").Groups;
-                    string part = groups["PART"].Value;
-                    if (String.IsNullOrEmpty(part) == false && Regex.IsMatch(part, @"^<{1,}.*?>{1,}$") == false)
-                    {
-                        _token.Add(part);
-                    }
-                }
-
-                Console con = Console.Instance;
-                con.Add(Fastboot.Instance().OEM.GetIdentifierToken());
-                con.Show();
-
+                MessageBox.Show("A device was not detected... Please ensure that you have the correct drivers configured and that they are working!");
             }
+
+            //Add this later if needed...
+
+            //Console con = Console.Instance;
+            //con.Add(Fastboot.Instance().OEM.GetIdentifierToken());
+            //con.Show();
+
         }
 
         private void btnHDevSignUp_Click(object sender, RoutedEventArgs e)
@@ -555,9 +617,17 @@ namespace ToolkitM9
 
         private void muiClearLogs_Click(object sender, RoutedEventArgs e)
         {
-            foreach (FileInfo f in new DirectoryInfo("./Data/Logs/").GetFiles("*.txt"))
+            MessageBoxResult messageResult = MessageBox.Show("Are you sure you want to delete all log files?", "Confirm selection...", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (messageResult == MessageBoxResult.Yes)
             {
-                f.Delete();
+                foreach (FileInfo f in new DirectoryInfo("./Data/Logs/").GetFiles("*.txt"))
+                {
+                    f.Delete();
+                }
+            }
+            if (messageResult == MessageBoxResult.No)
+            {
+                //No delete
             }
         }
     }

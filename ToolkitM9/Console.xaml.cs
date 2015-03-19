@@ -64,9 +64,9 @@ namespace ToolkitM9
         {
             foreach (string tmp in msg)
             {
-                TokenOutput.Document.Blocks.Add(new Paragraph(new Run(tmp.Replace("(bootloader) ", ""))));
+                Output.Document.Blocks.Add(new Paragraph(new Run(tmp.Replace("(bootloader) ", ""))));
             }
-            TokenOutput.ScrollToEnd();
+            Output.ScrollToEnd();
         }
         #endregion
 
@@ -74,7 +74,7 @@ namespace ToolkitM9
 
         public void Clear()
         {
-            TokenOutput.Document.Blocks.Clear();
+            Output.Document.Blocks.Clear();
         }
         #endregion
     }

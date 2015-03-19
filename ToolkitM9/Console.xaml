@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Output" Height="410" Width="300" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Topmost="True" ShowInTaskbar="False" WindowStyle="ToolWindow" Icon="Resources/SK.ico">
     <Grid>
-        <RichTextBox x:Name="TokenOutput" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#FF1A1A1A" Foreground="White">
+        <RichTextBox x:Name="Output" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#FF1A1A1A" Foreground="White">
             <RichTextBox.Resources>
                 <Style TargetType="{x:Type Paragraph}">
                     <Setter Property="Margin" Value="0,0,0,0"/>
