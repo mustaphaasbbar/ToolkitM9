@@ -42,6 +42,18 @@ namespace ToolkitM9
         {
             InitializeComponent();
 
+            #region adbFilter List
+
+            string[] adblist =
+                this.FindResource("ADBCmdList") as string[];
+
+            ICollectionView ADBview =
+                CollectionViewSource.GetDefaultView(adblist);
+
+            new TextSearchFilter(ADBview, this.adbSearch);
+
+            #endregion
+
             #region Recovery exception buttons
 
             //Only use for special device exceptions (eg. sprint only has twrp avaliable)
@@ -96,6 +108,34 @@ namespace ToolkitM9
             #region StartDevice Detection Service (DDS)
             DeviceDetectionService();
             #endregion
+        }
+
+        public class TextSearchFilter
+        {
+            public TextSearchFilter(ICollectionView filteredview, TextBox textbox)
+            {
+                string filterText = "";
+                filteredview.Filter = delegate(object obj)
+                {
+                    if (string.IsNullOrEmpty(filterText))
+                        return true;
+
+                    string str = obj as string;
+                    if (string.IsNullOrEmpty(str))
+                        return false;
+
+                    int index = str.IndexOf(filterText, 0, StringComparison.InvariantCultureIgnoreCase);
+
+                    return index > -1;
+                };
+
+                textbox.TextChanged += delegate
+                {
+                    filterText = textbox.Text;
+                    filteredview.Refresh();
+                };
+
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

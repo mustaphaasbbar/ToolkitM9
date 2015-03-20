@@ -9,6 +9,13 @@
         <System:String x:Key="page_adb_deviceselector_product">Product:</System:String>
         <System:String x:Key="page_adb_deviceselector_model">Model:</System:String>
         <System:String x:Key="page_adb_deviceselector_device">Device:</System:String>
+        <!-- ADB Commands Strings-->
+        <x:Array x:Key="ADBCmdList" Type="System:String">
+            <System:String>Reboot</System:String>
+            <System:String>Reboot Bootloader</System:String>
+            <System:String>Push</System:String>
+            <System:String>Sideload</System:String>
+        </x:Array>
     </Window.Resources>
     <Grid>
         <DockPanel Grid.RowSpan="2">
@@ -92,12 +99,9 @@
                 </GroupBox>
                 <GroupBox Header="Commands" HorizontalAlignment="Left" Margin="549,10,0,0" VerticalAlignment="Top" Height="278" Width="246">
                     <Grid Margin="0">
-                        <ListBox x:Name="lbADB" HorizontalAlignment="Left" Height="83" Margin="10,10,0,0" VerticalAlignment="Top" Width="214">
-                            <ListBoxItem x:Name="lbiReboot" Content="Reboot"/>
-                            <ListBoxItem x:Name="lbiRebootBoot" Content="Reboot Bootloader"/>
-                            <ListBoxItem x:Name="lbiPush" Content="Push"/>
-                            <ListBoxItem x:Name="lbiSideload" Content="Sideload"/>
-                        </ListBox>
+                        <ListBox x:Name="lbADB" HorizontalAlignment="Left" Height="83" Margin="10,27,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource ADBCmdList}" ItemsSource="{Binding}"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="10,6,0,0" TextWrapping="Wrap" Text="ADB Commands:" VerticalAlignment="Top"/>
+                        <TextBox x:Name="adbSearch" HorizontalAlignment="Left" Height="23" Margin="10,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="214"/>
                     </Grid>
                 </GroupBox>
             </Grid>
