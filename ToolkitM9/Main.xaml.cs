@@ -52,6 +52,14 @@ namespace ToolkitM9
 
             new TextSearchFilter(ADBview, this.adbSearch);
 
+            string[] fbtlist =
+                this.FindResource("FBTCmdList") as string[];
+
+            ICollectionView FBTview =
+                CollectionViewSource.GetDefaultView(fbtlist);
+
+            new TextSearchFilter(FBTview, this.fbtSearch);
+
             #endregion
 
             #region Recovery exception buttons

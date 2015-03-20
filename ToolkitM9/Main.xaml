@@ -16,6 +16,15 @@
             <System:String>Push</System:String>
             <System:String>Sideload</System:String>
         </x:Array>
+        <!-- FASTBOOT Commands Strings -->
+        <x:Array x:Key="FBTCmdList" Type="System:String">
+            <System:String>Reboot</System:String>
+            <System:String>Reboot Bootloader</System:String>
+            <System:String>Flash ZIP</System:String>
+            <System:String>Flash RECOVERY</System:String>
+            <System:String>Flash BOOT</System:String>
+            <System:String>Flash RADIO</System:String>
+        </x:Array>
     </Window.Resources>
     <Grid>
         <DockPanel Grid.RowSpan="2">
@@ -102,6 +111,8 @@
                         <ListBox x:Name="lbADB" HorizontalAlignment="Left" Height="83" Margin="10,27,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource ADBCmdList}" ItemsSource="{Binding}"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,6,0,0" TextWrapping="Wrap" Text="ADB Commands:" VerticalAlignment="Top"/>
                         <TextBox x:Name="adbSearch" HorizontalAlignment="Left" Height="23" Margin="10,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="214"/>
+                        <ListBox x:Name="lbFastboot" HorizontalAlignment="Left" Height="82" Margin="10,143,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource FBTCmdList}" ItemsSource="{Binding}"/>
+                        <TextBox x:Name="fbtSearch" HorizontalAlignment="Left" Height="23" Margin="10,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="214"/>
                     </Grid>
                 </GroupBox>
             </Grid>
