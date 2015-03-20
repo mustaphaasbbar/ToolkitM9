@@ -20,10 +20,7 @@
         <x:Array x:Key="FBTCmdList" Type="System:String">
             <System:String>Reboot</System:String>
             <System:String>Reboot Bootloader</System:String>
-            <System:String>Flash ZIP</System:String>
-            <System:String>Flash RECOVERY</System:String>
-            <System:String>Flash BOOT</System:String>
-            <System:String>Flash RADIO</System:String>
+            <System:String>Flash</System:String>
         </x:Array>
     </Window.Resources>
     <Grid>
