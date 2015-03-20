@@ -42,6 +42,9 @@
                 <Controls:AutomaticUpdater x:Name="autoUpdate" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" wyUpdateLocation="Updater.exe" DaysBetweenChecks="0" WaitBeforeCheckSecs="1"/>
             </Menu>
             <Grid>
+                
+
+                
                 <GroupBox Header="Auto-Root (Unlocked Bootloader)" HorizontalAlignment="Left" Margin="309,77,0,0" VerticalAlignment="Top" Height="94" Width="235">
                     <Grid Margin="0">
                         <Button x:Name="btnAutoRoot" Content="Go!" HorizontalAlignment="Left" Margin="139,40,0,0" VerticalAlignment="Top" Width="74" Height="26" Click="btnAutoRoot_Click"/>
@@ -109,16 +112,8 @@
                     <Grid Margin="0">
                         <ListBox x:Name="lbADB" HorizontalAlignment="Left" Height="83" Margin="10,27,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource ADBCmdList}" ItemsSource="{Binding}"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,6,0,0" TextWrapping="Wrap" Text="ADB Commands:" VerticalAlignment="Top"/>
-                        <AdornerDecorator>
-                            <TextBox x:Name="SearchTextBox">
-                                <controls:WatermarkService.Watermark>
-                                    <TextBlock>Type here to search text</TextBlock>
-                                </controls:WatermarkService.Watermark>
-                            </TextBox>
-                        </AdornerDecorator>
                         <TextBox x:Name="adbSearch" HorizontalAlignment="Left" Height="23" Margin="10,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151"/>
                         <ListBox x:Name="lbFastboot" HorizontalAlignment="Left" Height="82" Margin="10,143,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource FBTCmdList}" ItemsSource="{Binding}"/>
-                        <TextBox x:Name="fbtSearch" HorizontalAlignment="Left" Height="23" Margin="10,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151"/>
                         <Button x:Name="btnADBGo" Content="Go!" HorizontalAlignment="Left" Margin="166,115,0,0" VerticalAlignment="Top" Width="58" Height="23"/>
                         <Button x:Name="btnFBTGo" Content="Go!" HorizontalAlignment="Left" Margin="166,230,0,0" VerticalAlignment="Top" Width="58" Height="23"/>
                     </Grid>

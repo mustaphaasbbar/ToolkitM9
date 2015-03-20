@@ -87,8 +87,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="WatermarkAdorner.cs" />
-    <Compile Include="WatermarkService.cs" />
     <Page Include="Console.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
