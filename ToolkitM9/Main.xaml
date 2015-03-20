@@ -109,9 +109,11 @@
                     <Grid Margin="0">
                         <ListBox x:Name="lbADB" HorizontalAlignment="Left" Height="83" Margin="10,27,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource ADBCmdList}" ItemsSource="{Binding}"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,6,0,0" TextWrapping="Wrap" Text="ADB Commands:" VerticalAlignment="Top"/>
-                        <TextBox x:Name="adbSearch" HorizontalAlignment="Left" Height="23" Margin="10,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="214"/>
+                        <TextBox x:Name="adbSearch" HorizontalAlignment="Left" Height="23" Margin="10,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151"/>
                         <ListBox x:Name="lbFastboot" HorizontalAlignment="Left" Height="82" Margin="10,143,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource FBTCmdList}" ItemsSource="{Binding}"/>
-                        <TextBox x:Name="fbtSearch" HorizontalAlignment="Left" Height="23" Margin="10,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="214"/>
+                        <TextBox x:Name="fbtSearch" HorizontalAlignment="Left" Height="23" Margin="10,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151"/>
+                        <Button x:Name="btnADBGo" Content="Go!" HorizontalAlignment="Left" Margin="166,115,0,0" VerticalAlignment="Top" Width="58" Height="23"/>
+                        <Button x:Name="btnFBTGo" Content="Go!" HorizontalAlignment="Left" Margin="166,230,0,0" VerticalAlignment="Top" Width="58" Height="23"/>
                     </Grid>
                 </GroupBox>
             </Grid>
