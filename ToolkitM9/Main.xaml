@@ -21,6 +21,8 @@
             <System:String>Reboot</System:String>
             <System:String>Reboot Bootloader</System:String>
             <System:String>Flash</System:String>
+            <System:String>Erase</System:String>
+            <System:String>Boot</System:String>
         </x:Array>
     </Window.Resources>
     <Grid>
