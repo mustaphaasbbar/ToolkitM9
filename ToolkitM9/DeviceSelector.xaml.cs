@@ -74,7 +74,6 @@ namespace ToolkitM9
                         }
                         break;
                 }
-
                 var download = new Downloader();
                 download.ShowDialog();
 

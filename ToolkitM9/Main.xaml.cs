@@ -687,8 +687,17 @@ namespace ToolkitM9
                 {
                     case "Flash":
                         {
-                            Flash fls = new Flash();
-                            fls.ShowDialog();
+                            var fbtsel = new FastbootSelector();
+                            ToolkitM9.FastbootSelector.Settings.Selector = "Flash";
+                            fbtsel.ShowDialog();
+                        }
+                        break;
+
+                    case "Erase":
+                        {
+                            var fbtsel = new FastbootSelector();
+                            ToolkitM9.FastbootSelector.Settings.Selector = "Erase";
+                            fbtsel.ShowDialog();
                         }
                         break;
                 }
