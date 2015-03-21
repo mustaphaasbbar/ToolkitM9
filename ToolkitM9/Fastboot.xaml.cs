@@ -23,5 +23,16 @@ namespace ToolkitM9
         {
             InitializeComponent();
         }
+
+        #region Nested type: Settings
+
+        public static class Settings
+        {
+            public static string Selector = "null";
+            public static bool File;
+        }
+
+        #endregion Nested type: Settings
+
     }
 }

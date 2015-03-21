@@ -99,7 +99,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Flash.xaml">
+    <Page Include="Fastboot.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,8 +120,8 @@
     <Compile Include="Downloader.xaml.cs">
       <DependentUpon>Downloader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Flash.xaml.cs">
-      <DependentUpon>Flash.xaml</DependentUpon>
+    <Compile Include="Fastboot.xaml.cs">
+      <DependentUpon>Fastboot.xaml</DependentUpon>
     </Compile>
     <Compile Include="Load.xaml.cs">
       <DependentUpon>Load.xaml</DependentUpon>

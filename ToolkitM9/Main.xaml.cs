@@ -678,5 +678,31 @@ namespace ToolkitM9
                 //No delete
             }
         }
+
+        private void btnFBTGo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                switch (lbFastboot.SelectedValue.ToString())
+                {
+                    case "Flash":
+                        {
+                            Flash fls = new Flash();
+                            fls.ShowDialog();
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                "An error has occured! A log file has been placed in the Logs folder. Please report this error, with the log file, in the toolkit thread on XDA. Links in the 'File' menu!",
+                "Critical Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                string fileDateTime = DateTime.Now.ToString("MMddyyyy") + "_" + DateTime.Now.ToString("HHmmss");
+                var file = new StreamWriter("./Data/Logs/" + fileDateTime + ".txt");
+                file.WriteLine(ex);
+                file.Close();
+            }
+        }
     }
 }
