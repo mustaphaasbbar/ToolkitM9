@@ -55,6 +55,7 @@ namespace ToolkitM9
                             this.Title = (this.Title + " - Flash");
                             btnBrwsFile.IsEnabled = true;
                             btnGoFlash.Content = "Flash";
+                            tbNote.Text = "Select an file and partition to flash to.";
                         }
                         break;
 
@@ -62,6 +63,17 @@ namespace ToolkitM9
                         {
                             this.Title = (this.Title + " - Erase");
                             btnGoFlash.Content = "Erase";
+                            tbNote.Text = "Select a partition to erase.";
+                        }
+                        break;
+
+                    case "Boot":
+                        {
+                            this.Title = (this.Title + " - Boot");
+                            btnGoFlash.Content = "Boot";
+                            btnBrwsFile.IsEnabled = true;
+                            cbPartition.IsEnabled = false;
+                            tbNote.Text = "Select an image to boot from.";
                         }
                         break;
                 }
@@ -82,82 +94,260 @@ namespace ToolkitM9
         {
             try
             {
+                #region Flash
                 if (Settings.Selector == "Flash")
-                {
-                    switch (cbPartition.Text)
                     {
-                        case "Boot":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.BOOT, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                        switch (cbPartition.Text)
+                        {
+                            case "Boot":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.BOOT, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Cache":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.CACHE, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Cache":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.CACHE, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Data":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.DATA, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Data":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.DATA, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Hboot":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.HBOOT, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Hboot":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.HBOOT, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Kernel":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.KERNEL, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Kernel":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.KERNEL, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Misc":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.MISC, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Misc":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.MISC, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Radio":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.RADIO, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Radio":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.RADIO, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Ramdisk":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.RAMDISK, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Ramdisk":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.RAMDISK, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Recovery":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.RECOVERY, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Recovery":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.RECOVERY, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "System":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.SYSTEM, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "System":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.SYSTEM, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Unlock Token":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.UNLOCKTOKEN, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Unlock Token":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.UNLOCKTOKEN, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
 
-                        case "Zip":
-                            {
-                                Fastboot.Instance().Flash(IDDevicePartition.ZIP, Quote.Text + tbFilepath.Text + Quote.Text);
-                            }
-                            break;
+                            case "Zip":
+                                {
+                                    if (tbFilepath.Text == "")
+                                    {
+                                        MessageBox.Show("You must browse for a file to flash! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        Fastboot.Instance().Flash(IDDevicePartition.ZIP, Quote.Text + tbFilepath.Text + Quote.Text);
+                                    }
+                                }
+                                break;
+                        }
+                #endregion
                     }
+                #region Erase
+                else if (Settings.Selector == "Erase")
+                    {
+                        switch (cbPartition.Text)
+                        {
+                            case "Boot":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.BOOT);
+                                }
+                                break;
+
+                            case "Cache":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.CACHE);
+                                }
+                                break;
+
+                            case "Data":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.DATA);
+                                }
+                                break;
+
+                            case "Hboot":
+                                {
+                                    MessageBox.Show("You cannot erase the " + cbPartition.Text + " partition!", "Protected Partition!", MessageBoxButton.OK, MessageBoxImage.Information);
+                                }
+                                break;
+
+                            case "Kernel":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.KERNEL);
+                                }
+                                break;
+
+                            case "Misc":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.MISC);
+                                }
+                                break;
+
+                            case "Radio":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.RADIO);
+                                }
+                                break;
+
+                            case "Ramdisk":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.RAMDISK);
+                                }
+                                break;
+
+                            case "Recovery":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.RECOVERY);
+                                }
+                                break;
+
+                            case "System":
+                                {
+                                    Fastboot.Instance().Erase(IDDevicePartition.SYSTEM);
+                                }
+                                break;
+
+                            case "Unlock Token":
+                                {
+                                    MessageBox.Show("You cannot erase the " + cbPartition.Text + " partition!", "Protected Partition!", MessageBoxButton.OK, MessageBoxImage.Information);
+                                }
+                                break;
+
+                            case "Zip":
+                                {
+                                    MessageBox.Show("You cannot erase the " + cbPartition.Text + " partition!", "Protected Partition!", MessageBoxButton.OK, MessageBoxImage.Information);
+                                }
+                                break;
+                        }
+                #endregion
+                    }
+                #region boot
+                else if (Settings.Selector == "Boot")
+                {
+                    if (tbFilepath.Text == "")
+                    {
+                        MessageBox.Show("You must browse for a file to boot from! Please select a file.", "Missing file!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        Fastboot.Instance().Boot(Quote.Text + tbFilepath.Text + Quote.Text);
+                    }
+                #endregion
                 }
             }
             catch (Exception ex)
@@ -169,6 +359,31 @@ namespace ToolkitM9
                 var file = new StreamWriter("./Data/Logs/" + fileDateTime + ".txt");
                 file.WriteLine(ex);
                 file.Close();
+            }
+        }
+
+        private void btnBrwsFile_Click(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog 
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+
+
+
+            // Set filter for file extension and default file extension 
+            dlg.DefaultExt = "*.*";
+            dlg.Filter = "All Files (*.*)|*.*";
+
+
+            // Display OpenFileDialog by calling ShowDialog method 
+            Nullable<bool> result = dlg.ShowDialog();
+
+
+            // Get the selected file name and display in a TextBox 
+            if (result == true)
+            {
+                // Open document 
+                string filename = dlg.FileName;
+                tbFilepath.Text = filename;
             }
         }
     }

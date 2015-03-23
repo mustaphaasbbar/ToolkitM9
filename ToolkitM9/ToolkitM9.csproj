@@ -63,6 +63,11 @@
   <ItemGroup>
     <Reference Include="AndroidCtrl">
       <HintPath>..\..\AndroidCtrl\AndroidCtrl.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="AndroidCtrlUI">
+      <HintPath>..\..\AndroidCtrlUI\AndroidCtrlUI.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="AutomaticUpdaterWPF">
       <HintPath>..\..\wyUpdate\AutomaticUpdaterWPF.dll</HintPath>
@@ -87,6 +92,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ADBSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Console.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -107,6 +116,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="ADBSelector.xaml.cs">
+      <DependentUpon>ADBSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

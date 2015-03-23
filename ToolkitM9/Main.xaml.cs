@@ -700,6 +700,87 @@ namespace ToolkitM9
                             fbtsel.ShowDialog();
                         }
                         break;
+
+                    case "Boot":
+                        {
+                            var fbtsel = new FastbootSelector();
+                            ToolkitM9.FastbootSelector.Settings.Selector = "Boot";
+                            fbtsel.ShowDialog();
+                        }
+                        break;
+
+                    case "Reboot":
+                        {
+                            Fastboot.Instance().Reboot(IDBoot.REBOOT);
+                        }
+                        break;
+
+                    case "Reboot Bootloader":
+                        {
+                            Fastboot.Instance().Reboot(IDBoot.BOOTLOADER);
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                "An error has occured! A log file has been placed in the Logs folder. Please report this error, with the log file, in the toolkit thread on XDA. Links in the 'File' menu!",
+                "Critical Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                string fileDateTime = DateTime.Now.ToString("MMddyyyy") + "_" + DateTime.Now.ToString("HHmmss");
+                var file = new StreamWriter("./Data/Logs/" + fileDateTime + ".txt");
+                file.WriteLine(ex);
+                file.Close();
+            }
+        }
+
+        private void btnADBGo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                switch (lbADB.SelectedValue.ToString())
+                {
+                    case "Reboot":
+                        {
+                            ADB.Instance().Reboot(IDBoot.REBOOT);
+                        }
+                        break;
+
+                    case "Reboot Bootloader":
+                        {
+                            ADB.Instance().Reboot(IDBoot.BOOTLOADER);
+                        }
+                        break;
+
+                    case "Reboot Recovery":
+                        {
+                            ADB.Instance().Reboot(IDBoot.RECOVERY);
+                        }
+                        break;
+
+                    case "Push":
+                        {
+                            ToolkitM9.ADBSelector.Settings.Selector = "Push";
+                            var adbsel = new ADBSelector();
+                            adbsel.ShowDialog();
+                        }
+                        break;
+
+                    case "Sideload":
+                        {
+                            ToolkitM9.ADBSelector.Settings.Selector = "Sideload";
+                            var adbsel = new ADBSelector();
+                            adbsel.ShowDialog();
+                        }
+                        break;
+
+                    case "Boot":
+                        {
+                            ToolkitM9.ADBSelector.Settings.Selector = "Pull";
+                            var adbsel = new ADBSelector();
+                            adbsel.ShowDialog();
+                        }
+                        break;
                 }
             }
             catch (Exception ex)

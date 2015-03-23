@@ -14,6 +14,7 @@
             <System:String>Reboot</System:String>
             <System:String>Reboot Bootloader</System:String>
             <System:String>Push</System:String>
+            <System:String>Pull</System:String>
             <System:String>Sideload</System:String>
         </x:Array>
         <!-- FASTBOOT Commands Strings -->
@@ -111,13 +112,13 @@
                 <GroupBox Header="Commands" HorizontalAlignment="Left" Margin="549,10,0,0" VerticalAlignment="Top" Height="278" Width="265">
                     <Grid Margin="0">
                         <ListBox x:Name="lbADB" HorizontalAlignment="Left" Height="101" Margin="29,2,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource ADBCmdList}" ItemsSource="{Binding}"/>
-                        <TextBox x:Name="adbSearch" HorizontalAlignment="Left" Height="23" Margin="63,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="117"/>
-                        <TextBox x:Name="fbtSearch" HorizontalAlignment="Left" Height="23" Margin="63,223,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="117"/>
+                        <TextBox x:Name="adbSearch" HorizontalAlignment="Left" Height="23" Margin="34,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146"/>
+                        <TextBox x:Name="fbtSearch" HorizontalAlignment="Left" Height="23" Margin="34,223,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146"/>
                         <ListBox x:Name="lbFastboot" HorizontalAlignment="Left" Height="82" Margin="29,136,0,0" VerticalAlignment="Top" Width="214" DataContext="{StaticResource FBTCmdList}" ItemsSource="{Binding}"/>
-                        <Button x:Name="btnADBGo" Content="Go!" HorizontalAlignment="Left" Margin="185,108,0,0" VerticalAlignment="Top" Width="58" Height="23"/>
+                        <Button x:Name="btnADBGo" Content="Go!" HorizontalAlignment="Left" Margin="185,108,0,0" VerticalAlignment="Top" Width="58" Height="23" Click="btnADBGo_Click"/>
                         <Button x:Name="btnFBTGo" Content="Go!" HorizontalAlignment="Left" Margin="185,223,0,0" VerticalAlignment="Top" Width="58" Height="23" Click="btnFBTGo_Click"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="29,108,0,0" TextWrapping="Wrap" Text="Filter:" VerticalAlignment="Top" Height="23"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="29,223,0,0" TextWrapping="Wrap" Text="Filter:" VerticalAlignment="Top" Height="23"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="0,108,0,0" TextWrapping="Wrap" Text="Filter:" VerticalAlignment="Top" Height="23"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="0,223,0,0" TextWrapping="Wrap" Text="Filter:" VerticalAlignment="Top" Height="23"/>
                         <TextBlock HorizontalAlignment="Left" Margin="1,43,0,0" TextWrapping="Wrap" Text="ADB" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" FontSize="14">
                             <TextBlock.RenderTransform>
                                 <TransformGroup>
