@@ -18,10 +18,9 @@ using System.IO;
 
 using AndroidCtrl;
 using AndroidCtrl.ADB;
-using AndroidCtrl.AAPT;
-using AndroidCtrl.Tools;
-using AndroidCtrl.Signer;
 using AndroidCtrl.Fastboot;
+using AndroidCtrl.Tools;
+using AndroidCtrlUI.Explorer;
 
 namespace ToolkitM9
 {
@@ -30,9 +29,17 @@ namespace ToolkitM9
     /// </summary>
     public partial class ADBSelector : Window
     {
+        FileSystemViewModel _explorer;
+
         public ADBSelector()
         {
             InitializeComponent();
+
+            AndroidCtrlUI.Tools.Language.AutoLoad();
+
+            _explorer = new FileSystemViewModel();
+
+            this.DataContext = _explorer;
         }
 
         #region Nested type: Settings

@@ -65,9 +65,9 @@
       <HintPath>..\..\AndroidCtrl\AndroidCtrl.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="AndroidCtrlUI">
-      <HintPath>..\..\AndroidCtrlUI\AndroidCtrlUI.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+    <Reference Include="AndroidCtrlUI, Version=0.0.0.3, Culture=neutral, PublicKeyToken=65e353f03f93ebbe, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AndroidCtrlUI\22-3-15\AndroidCtrlUI.dll</HintPath>
     </Reference>
     <Reference Include="AutomaticUpdaterWPF">
       <HintPath>..\..\wyUpdate\AutomaticUpdaterWPF.dll</HintPath>

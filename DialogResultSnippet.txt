@@ -1,9 +1,0 @@
-MessageBoxResult messageResult = MessageBox.Show("Would you like to restart the application to see effects? Only necessary if changing devices!", "Restart?", MessageBoxButton.YesNo, MessageBoxImage.Information);
-if (messageResult == MessageBoxResult.Yes)
-{
-
-}
-else if (messageResult == MessageBoxResult.No)
-{
-
-}
