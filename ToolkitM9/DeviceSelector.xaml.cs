@@ -34,12 +34,24 @@ namespace ToolkitM9
             {
                 switch (Selector.Text.ToString())
                 {
-                    case "AT&T, International GSM":
+                    case "GSM":
                         {
                             ToolkitM9.Downloader.Settings.Device = "GSM";
-                            ToolkitM9.Downloader.Settings.TwoRecoveries = true;
+                            //Change to false if there is only one, otherwise download window will prematurely quit
+                            ToolkitM9.Downloader.Settings.TwoRecoveries = false;
 
                             Properties.Settings.Default["Device"] = "GSM";
+                            Properties.Settings.Default.Save();
+                        }
+                        break;
+
+                    case "AT&T":
+                        {
+                            ToolkitM9.Downloader.Settings.Device = "ATT";
+                            //Change to false if there is only one, otherwise download window will prematurely quit
+                            ToolkitM9.Downloader.Settings.TwoRecoveries = false;
+
+                            Properties.Settings.Default["Device"] = "AT&T";
                             Properties.Settings.Default.Save();
                         }
                         break;
@@ -47,6 +59,7 @@ namespace ToolkitM9
                     case "Sprint":
                         {
                             ToolkitM9.Downloader.Settings.Device = "Sprint";
+                            //Change to false if there is only one, otherwise download window will prematurely quit
                             ToolkitM9.Downloader.Settings.TwoRecoveries = true;
 
                             Properties.Settings.Default["Device"] = Selector.Text.ToString();
@@ -57,6 +70,7 @@ namespace ToolkitM9
                     case "T-Mobile":
                         {
                             ToolkitM9.Downloader.Settings.Device = "T-Mobile";
+                            //Change to false if there is only one, otherwise download window will prematurely quit
                             ToolkitM9.Downloader.Settings.TwoRecoveries = true;
 
                             Properties.Settings.Default["Device"] = Selector.Text.ToString();
@@ -67,6 +81,7 @@ namespace ToolkitM9
                     case "Verizon":
                         {
                             ToolkitM9.Downloader.Settings.Device = "Verizon";
+                            //Change to false if there is only one, otherwise download window will prematurely quit
                             ToolkitM9.Downloader.Settings.TwoRecoveries = true;
 
                             Properties.Settings.Default["Device"] = Selector.Text.ToString();

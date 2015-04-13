@@ -1,0 +1,33 @@
+﻿<Window x:Class="ToolkitM9.RVersion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Checking for newer recovery..." Height="280" Width="422" Loaded="Window_Loaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="Resources/SK.ico">
+    <Grid>
+        <GroupBox Header="Server" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="182" Width="188">
+            <Grid Margin="0">
+                <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,31,0,0" TextWrapping="Wrap" Text="Version:" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,52,0,0" TextWrapping="Wrap" Text="Notes:" VerticalAlignment="Top"/>
+                <TextBlock x:Name="sRecName" HorizontalAlignment="Left" Margin="49,10,0,0" TextWrapping="Wrap" Text="recname" VerticalAlignment="Top" Width="117"/>
+                <TextBlock x:Name="sRecVer" HorizontalAlignment="Left" Margin="57,31,0,0" TextWrapping="Wrap" Text="recver" VerticalAlignment="Top" Width="109"/>
+                <TextBlock x:Name="sRecNotes" HorizontalAlignment="Left" Margin="49,52,0,0" TextWrapping="Wrap" Text="recnotes" VerticalAlignment="Top" Width="117" Height="66"/>
+                <Button x:Name="btnNotes" Content="More Info" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top" Width="156" Height="27" Click="btnNotes_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Client" HorizontalAlignment="Left" Margin="203,10,0,0" VerticalAlignment="Top" Height="182" Width="188">
+            <Grid Margin="0">
+                <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,31,0,0" TextWrapping="Wrap" Text="Version:" VerticalAlignment="Top"/>
+                <TextBlock x:Name="lRecName" HorizontalAlignment="Left" Margin="49,10,0,0" TextWrapping="Wrap" Text="recname" VerticalAlignment="Top" Width="117"/>
+                <TextBlock x:Name="lRecVer" HorizontalAlignment="Left" Margin="57,31,0,0" TextWrapping="Wrap" Text="recver" VerticalAlignment="Top" Width="109"/>
+                <Button x:Name="btnUpdate" Content="Update Recoveries" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top" Width="156" Height="27" IsEnabled="False" Click="btnUpdate_Click"/>
+                <CheckBox x:Name="cbFlashDownload" Content="Flash in 'Download Mode'" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="156" Height="17"/>
+                <TextBlock HorizontalAlignment="Left" Margin="31,87,0,0" TextWrapping="Wrap" Text="(oem rebootRUU)" VerticalAlignment="Top"/>
+            </Grid>
+        </GroupBox>
+        <Button x:Name="btnConfirm" Content="Confirm" HorizontalAlignment="Left" Margin="302,197,0,0" VerticalAlignment="Top" Width="89" Height="24" Click="btnConfirm_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="15,201,0,0" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="tBRecoveryStatus" HorizontalAlignment="Left" Margin="55,201,0,0" TextWrapping="Wrap" Text="Idle..." VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

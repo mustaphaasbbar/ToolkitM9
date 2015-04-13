@@ -15,6 +15,8 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.ComponentModel;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace ToolkitM9
 {
@@ -34,6 +36,10 @@ namespace ToolkitM9
             {
                 var client = new WebClient();
                 var client2 = new WebClient();
+
+                var rClient = new WebClient();
+                var rClient2 = new WebClient();
+
                 switch (Settings.Selector)
                 {
                     case "ADB":
@@ -62,23 +68,49 @@ namespace ToolkitM9
                         {
                             if (Settings.TwoRecoveries == true)
                             {
-                                tBStatus.Text = "Downloading recoveries for " + Settings.Device.ToString() + ".";
+                                tBStatus.Text = "Downloading recoveries for " + Settings.Device + ".";
+                                //Recovery 1 (TWRP)
                                 client.DownloadFileAsync(
-                                    new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/" + Settings.Device + "/recovery1.img"),
+                                    new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/recoveries/TWRP/recovery1.img"),
                                     "./Data/Recoveries/Recovery1.img");
+                                //Recovery 2
                                 client2.DownloadProgressChanged += (client_DownloadProgressChanged);
                                 client2.DownloadFileCompleted += (client_DownloadFileCompleted);
                                 client2.DownloadFileAsync(
-                                    new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/" + Settings.Device + "/recovery2.img"),
-                                    "./Data/Recoveries/Recovery2.img");
+                                    new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/recoveries/" + Settings.Device + "/recovery2.img"),
+                                    "./Data/Recoveries/Recovery2.img");       
+                                //Recovery 1 XML
+                                rClient.DownloadFileAsync(
+                                    new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/recoveries/" + Settings.Device + "/Version.xml"),
+                                    "./Data/Recoveries/rVersion1.xml");
+                                //Recovery 2 XML
+                                rClient2.DownloadFileAsync(
+                                    new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/recoveries/" + Settings.Device + "/Version2.xml"),
+                                    "./Data/Recoveries/rVersion2.xml");
                             }
                             else
                             {
+                                tBStatus.Text = "Downloading recovery for " + Settings.Device + ".";
+
+                                //Recovery 1 (CTB TWRP)
+                                //Remote Version
+                                XDocument doc = XDocument.Load("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/recoveries/CTB_TWRP/Version.xml");
+                                var name = doc.Root.Element("Name").Value;
+                                var version = doc.Root.Element("Version").Value;
+                                var notes = doc.Root.Element("Notes").Value;
+                                var site = doc.Root.Element("Site").Value;
+                                var dl = doc.Root.Element("DL").Value;
+
+                                //Recovery 1 (TWRP)
                                 client.DownloadProgressChanged += (client_DownloadProgressChanged);
                                 client.DownloadFileCompleted += (client_DownloadFileCompleted);
                                 client.DownloadFileAsync(
-                                    new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/" + Settings.Device + "/recovery1.img"),
+                                    new Uri(dl.ToString()),
                                     "./Data/Recoveries/Recovery1.img");
+                                //Recovery 1 XML
+                                rClient.DownloadFileAsync(
+                                    new Uri("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/recoveries/CTB_TWRP/Version.xml"),
+                                    "./Data/Recoveries/rVersion1.xml");
                             }
                         }
                         break;
@@ -154,6 +186,9 @@ namespace ToolkitM9
             }
             catch (Exception ex)
             {
+                MessageBox.Show(
+                "An error has occured! A log file has been placed in the Logs folder. Please report this error, with the log file, in the toolkit thread on XDA. Links in the 'File' menu!",
+                "Critical Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 string fileDateTime = DateTime.Now.ToString("MMddyyyy") + "_" + DateTime.Now.ToString("HHmmss");
                 var file = new StreamWriter("./Data/Logs/" + fileDateTime + ".txt");
                 file.WriteLine(ex);

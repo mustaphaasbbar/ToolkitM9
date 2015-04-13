@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Globalization;
 using System.Net;
 using System.Xml;
+using System.Xml.Linq;
 using System.Reflection;
 
 using AndroidCtrl;
@@ -62,7 +63,9 @@ namespace ToolkitM9
 
             #endregion
 
-            #region Recovery exception buttons
+
+
+            #region Recovery buttons
 
             //Only use for special device exceptions (eg. sprint only has twrp avaliable)
             try
@@ -71,11 +74,75 @@ namespace ToolkitM9
                 {
                     case "Sprint":
                         {
+                            //Getting values local xml
+                            XDocument docL = XDocument.Load("./Data/Recoveries/rVersion1.xml");
+                            var nameL = docL.Root.Element("Name").Value;
+
                             //TWRP
-                            btnFlashRecovery1.Content = "Flash TWRP";
+                            btnFlashRecovery1.Content = nameL.ToString();
                             btnFlashRecovery1.IsEnabled = true;
                             //CWM
-                            btnFlashRecovery2.Content = "Not Avaliable (CWM)";
+                            btnFlashRecovery2.Content = "Not Avaliable";
+                            btnFlashRecovery2.IsEnabled = false;
+                        }
+                        break;
+
+                    case "GSM":
+                        {
+                            //Getting values local xml
+                            XDocument docL = XDocument.Load("./Data/Recoveries/rVersion1.xml");
+                            var nameL = docL.Root.Element("Name").Value;
+
+                            //TWRP
+                            btnFlashRecovery1.Content = nameL.ToString();
+                            btnFlashRecovery1.IsEnabled = true;
+                            //CWM
+                            btnFlashRecovery2.Content = "Not Avaliable";
+                            btnFlashRecovery2.IsEnabled = false;
+                        }
+                        break;
+
+                    case "AT&T":
+                        {
+                            //Getting values local xml
+                            XDocument docL = XDocument.Load("./Data/Recoveries/rVersion1.xml");
+                            var nameL = docL.Root.Element("Name").Value;
+
+                            //TWRP
+                            btnFlashRecovery1.Content = nameL.ToString();
+                            btnFlashRecovery1.IsEnabled = true;
+                            //CWM
+                            btnFlashRecovery2.Content = "Not Avaliable";
+                            btnFlashRecovery2.IsEnabled = false;
+                        }
+                        break;
+
+                    case "T-Mobile":
+                        {
+                            //Getting values local xml
+                            XDocument docL = XDocument.Load("./Data/Recoveries/rVersion1.xml");
+                            var nameL = docL.Root.Element("Name").Value;
+
+                            //TWRP
+                            btnFlashRecovery1.Content = nameL.ToString();
+                            btnFlashRecovery1.IsEnabled = true;
+                            //CWM
+                            btnFlashRecovery2.Content = "Not Avaliable";
+                            btnFlashRecovery2.IsEnabled = false;
+                        }
+                        break;
+
+                    case "Verizon":
+                        {
+                            //Getting values local xml
+                            XDocument docL = XDocument.Load("./Data/Recoveries/rVersion1.xml");
+                            var nameL = docL.Root.Element("Name").Value;
+
+                            //TWRP
+                            btnFlashRecovery1.Content = nameL.ToString();
+                            btnFlashRecovery1.IsEnabled = true;
+                            //CWM
+                            btnFlashRecovery2.Content = "Not Avaliable";
                             btnFlashRecovery2.IsEnabled = false;
                         }
                         break;
@@ -118,6 +185,26 @@ namespace ToolkitM9
             #endregion
         }
 
+        #region Add
+
+        public void Add(List<string> msg)
+        {
+            foreach (string tmp in msg)
+            {
+                Output.Document.Blocks.Add(new Paragraph(new Run(tmp.Replace("(bootloader) ", ""))));
+            }
+            Output.ScrollToEnd();
+        }
+        #endregion
+
+        #region Clear
+
+        public void Clear()
+        {
+            Output.Document.Blocks.Clear();
+        }
+        #endregion
+
         public class TextSearchFilter
         {
             public TextSearchFilter(ICollectionView filteredview, TextBox textbox)
@@ -146,10 +233,19 @@ namespace ToolkitM9
             }
         }
 
+        //BGw on Load declared
+        private readonly BackgroundWorker wLoad = new BackgroundWorker();
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             tBSelectedDevice.Text = Properties.Settings.Default["Device"].ToString();
-            this.Title = this.Title + " Version: " + Assembly.GetEntryAssembly().GetName().Version;
+            tbVersion.Text = " Version: " + Assembly.GetEntryAssembly().GetName().Version;
+
+            //Remote Version
+            XDocument doc = XDocument.Load("https://s.basketbuild.com/dl/devs?dl=squabbi/m9/toolkit/News.xml");
+            var text = doc.Root.Element("Text").Value;
+
+            muiTbNews.Text = text.ToString();
         }
 
         private static string GetStringBetween(string source, string start, string end)
@@ -296,70 +392,31 @@ namespace ToolkitM9
             this.Close();
         }
 
-        private void btnAutoRoot_Click(object sender, RoutedEventArgs e)
+        private static void Extract(string nameSpace, string outDirectory, string internalFilePath, string resourceName)
         {
-            
-            if (Properties.Settings.Default["Device"].ToString() == "AT-T GSM")
+            Assembly assembly = Assembly.GetCallingAssembly();
+
+            using (Stream s = assembly.GetManifestResourceStream(nameSpace + "." + (internalFilePath == "" ? "" : internalFilePath + ".") + resourceName))
+                using (BinaryReader bR = new BinaryReader(s))
+                    using (FileStream fs = new FileStream(outDirectory + "\\" + resourceName, FileMode.OpenOrCreate))
+                        using (BinaryWriter bW = new BinaryWriter(fs))
+                            bW.Write(bR.ReadBytes((int)s.Length));
+        }
+
+        private void btnRoot_Click(object sender, RoutedEventArgs e)
+        {          
+            if (!File.Exists("SuperSU.zip"))
             {
-                #region GSM Root
-                MessageBoxResult messageResult = MessageBox.Show("You have chosen International GSM / AT&T. This will flash TWRP and push the SU.zip to your device. Do you want to continue?", "Confirm Selection", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (messageResult == MessageBoxResult.Yes)
-                {
-                    tBRootStatus.Text = "Rebooting to bootloader...";
+                tBRootStatus.Text = "Extracting SuperSU.zip";
 
-                    Task.Delay(2000).ContinueWith(_ =>
-                    {
-                        ADB.Start();
-                        ADB.Instance().Reboot(IDBoot.BOOTLOADER);
-
-                        App.Current.Dispatcher.Invoke((Action)delegate
-                        {
-                            tBRootStatus.Text = "Waiting for device...";
-                        });
-
-                        Task.Delay(10000).ContinueWith(a_ =>
-                        {
-                            App.Current.Dispatcher.Invoke((Action)delegate
-                            {
-                                tBRootStatus.Text = "Flashing recovery...";
-                                Fastboot.Instance().Flash(IDDevicePartition.RECOVERY, "./Data/Recoveries/Recovery1.img");
-                                Fastboot.Instance().Reboot(IDBoot.REBOOT);
-                                tBRootStatus.Text = "Waiting for deivce...";
-                            });
-
-                            Task.Delay(40000).ContinueWith(b_ =>
-                            {
-                                App.Current.Dispatcher.Invoke((Action)delegate
-                                {
-                                    ADB.Instance().Push("./Data/SU.zip", "/sdcard/su.zip");
-                                    tBRootStatus.Text = "Rebooting Recovery...";
-                                    ADB.Instance().Reboot(IDBoot.RECOVERY);
-                                });
-                            }
-                            );
-                        }
-                        );
-                    }
-                    );
-                }
-                else if (messageResult == MessageBoxResult.No)
-                {
-
-                }
-                #endregion
+                Extract("ToolkitM9", "./Data", "Resources", "SuperSU.zip");
             }
-            else if (Properties.Settings.Default["Device"].ToString() == "Sprint")
-            {
-                //Selected Spr
-            }
-            else if (Properties.Settings.Default["Device"].ToString() == "T-Mobile")
-            {
-                //Selected TM
-            }
-            else if (Properties.Settings.Default["Device"].ToString() == "Verizon")
-            {
-                //Selected Ver
-            }
+
+            this.Add(ADB.Instance().Push("./Data/SuperSU.zip", "/sdcard/SuperSU.zip"));
+            tBRootStatus.Text = "Rebooting into Recovery...";
+            this.Add(ADB.Instance().Reboot(IDBoot.RECOVERY));
+            MessageBox.Show("From your recovery, you will now flash the SuperSU.zip that has been placed in the ROOT of your INTERNAL STORAGE!", "Recovery time!", MessageBoxButton.OK, MessageBoxImage.Information);
+            tBRootStatus.Text = "Idle...";
         }
 
         private void btnInstalledPrograms_Click(object sender, RoutedEventArgs e)
@@ -371,136 +428,6 @@ namespace ToolkitM9
         private void btnDeviceMan_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("devmgmt.msc");
-        }
-
-        private void btnUnlockCode_Click(object sender, RoutedEventArgs e)
-        {
-            IDDeviceState state = General.CheckDeviceState(ADB.Instance().DeviceID);
-            if (state == IDDeviceState.DEVICE)
-            {
-                tBUnlockStatus.Text = "Rebooting into the bootloader...";
-                ADB.Instance().Reboot(IDBoot.BOOTLOADER);
-
-                using (StreamWriter sw = File.CreateText("./Data/token.txt"))
-                {
-                    List<string> _token = new List<string>();
-                    foreach (string line in Fastboot.Instance().OEM.GetIdentifierToken())
-                    {
-                        GroupCollection groups = Regex.Match(line, @"^\(bootloader\)\s{1,}(?<PART>.*?)$").Groups;
-                        string part = groups["PART"].Value;
-                        if (String.IsNullOrEmpty(part) == false && Regex.IsMatch(part, @"^<{1,}.*?>{1,}$") == false)
-                        {
-                            _token.Add(part);
-                        }
-                    }
-
-                    tBUnlockStatus.Text = "Collecting token...";
-
-                    //the final string which u can write to an file
-                    string token = String.Join("\n", _token.ToArray());
-                    sw.WriteLine(token.ToString());
-
-                    sw.WriteLine(" ");
-                    sw.WriteLine("Please copy everything above this line!");
-                    sw.WriteLine(" ");
-                    sw.WriteLine("Next, sign into your HTC Dev account on the webpage that just opened.");
-                    sw.WriteLine("If you do not have an account, create and activate an account with your email, then come back to this link.");
-                    sw.WriteLine("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
-                    sw.WriteLine("Then, paste the Token ID you just copied at the bottom of the webpage.");
-                    sw.WriteLine("Hit submit, and wait for the email with the unlock file.");
-                    sw.WriteLine(" ");
-                    sw.WriteLine("Once you have received the unlock file, download it and continue on to the next step, unlocking your bootloader.");
-                    sw.WriteLine("This file is saved as token.txt in the Data folder if you need it in the future.");
-                    sw.Close();
-                }
-
-                MessageBox.Show("The token is saved as token.txt in the Data folder. Further instructions are there. Please press OK to dismiss...");
-                //Process.Start("./Data/token.txt");
-
-                MessageBoxResult messageResult = MessageBox.Show("The package has been secured! Your unlock code is located '/Data/token.txt'. Would you like to reboot now?", "Token Obtained!", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (messageResult == MessageBoxResult.Yes)
-                {
-                    Fastboot.Instance().Reboot(IDBoot.REBOOT);
-                    Process.Start("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
-                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "/Data/token.txt");
-                    MessageBox.Show("Next Step!", "Once you have recieved the unlock file from HTC, you can move on to the next step, unlocking your bootloader!", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                if (messageResult == MessageBoxResult.No)
-                {
-                    Process.Start("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
-                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "/Data/token.txt");
-                    MessageBox.Show("Next Step!", "Once you have recieved the unlock file from HTC, you can move on to the next step, unlocking your bootloader! More information is also avaliable in the /Data/token.txt file.", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            else if (state == IDDeviceState.FASTBOOT)
-            {
-                using (StreamWriter sw = File.CreateText("./Data/token.txt"))
-                {
-                    List<string> _token = new List<string>();
-                    foreach (string line in Fastboot.Instance().OEM.GetIdentifierToken())
-                    {
-                        GroupCollection groups = Regex.Match(line, @"^\(bootloader\)\s{1,}(?<PART>.*?)$").Groups;
-                        string part = groups["PART"].Value;
-                        if (String.IsNullOrEmpty(part) == false && Regex.IsMatch(part, @"^<{1,}.*?>{1,}$") == false)
-                        {
-                            _token.Add(part);
-                        }
-                    }
-
-                    tBUnlockStatus.Text = "Collecting token...";
-
-                    //the final string which u can write to an file
-                    string token = String.Join("\n", _token.ToArray());
-                    sw.WriteLine(token.ToString());
-
-                    sw.WriteLine(" ");
-                    sw.WriteLine("Please copy everything above this line!");
-                    sw.WriteLine(" ");
-                    sw.WriteLine("Next, sign into your HTC Dev account on the webpage that just opened.");
-                    sw.WriteLine("If you do not have an account, create and activate an account with your email, then come back to this link.");
-                    sw.WriteLine("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
-                    sw.WriteLine("Then, paste the Token ID you just copied at the bottom of the webpage.");
-                    sw.WriteLine("Hit submit, and wait for the email with the unlock file.");
-                    sw.WriteLine(" ");
-                    sw.WriteLine("Once you have received the unlock file, download it and continue on to the next step, unlocking your bootloader.");
-                    sw.WriteLine("This file is saved as token.txt in the Data folder if you need it in the future.");
-                    sw.Close();
-                }
-
-                MessageBox.Show("The token is saved as token.txt in the Data folder. Further instructions are there. Please press OK to dismiss...");
-                //Process.Start("./Data/token.txt");
-
-                MessageBoxResult messageResult = MessageBox.Show("The package has been secured! Your unlock code is located '/Data/token.txt'. Would you like to reboot now?", "Token Obtained!", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (messageResult == MessageBoxResult.Yes)
-                {
-                    Fastboot.Instance().Reboot(IDBoot.REBOOT);
-                    Process.Start("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
-                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "/Data/token.txt");
-                    MessageBox.Show("Next Step!", "Once you have recieved the unlock file from HTC, you can move on to the next step, unlocking your bootloader!", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                if (messageResult == MessageBoxResult.No)
-                {
-                    Process.Start("http://www.htcdev.com/bootloader/unlock-instructions/page-3");
-                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "/Data/token.txt");
-                    MessageBox.Show("Next Step!", "Once you have recieved the unlock file from HTC, you can move on to the next step, unlocking your bootloader! More information is also avaliable in the /Data/token.txt file.", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            else
-            {
-                MessageBox.Show("A device was not detected... Please ensure that you have the correct drivers configured and that they are working!");
-            }
-
-            //Add this later if needed...
-
-            //Console con = Console.Instance;
-            //con.Add(Fastboot.Instance().OEM.GetIdentifierToken());
-            //con.Show();
-
-        }
-
-        private void btnHDevSignUp_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("http://www.htcdev.com/register/");
         }
 
         private void muiHelp_Click(object sender, RoutedEventArgs e)
@@ -530,78 +457,18 @@ namespace ToolkitM9
 
         private void btnFlashRecovery1_Click(object sender, RoutedEventArgs e)
         {
-            if (ADB.Instance().GetState() == IDDeviceState.DEVICE)
-            {
-                MessageBoxResult messageResult = MessageBox.Show("Your phone needs to be in 'fastboot USB' mode. Would you like to reboot into it now?", "Reboot to bootloader required!", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (messageResult == MessageBoxResult.Yes)
-                {
-                    tBRecoveryStatus.Text = "Rebooting into Bootloader...";
-                    ADB.Instance().Reboot(IDBoot.BOOTLOADER);
-                    tBRootStatus.Text = "Waiting for device...";
+            ToolkitM9.RVersion.Settings.Recovery = "1";
 
-                    Task.Delay(10000).ContinueWith(_ =>
-                    {
-                        tBRecoveryStatus.Text = "Flashing recovery...";
-                        Fastboot.Instance().Flash(IDDevicePartition.RECOVERY, "./Data/Recoveries/Recovery1.img");
-
-                        App.Current.Dispatcher.Invoke((Action)delegate
-                        {
-                            tBRecoveryStatus.Text = "Rebooting...";
-                            Fastboot.Instance().Reboot(IDBoot.REBOOT);
-                        });
-                    }
-                    );
-                }
-            }
-            else if (ADB.Instance().GetState() == IDDeviceState.FASTBOOT)
-            {
-                tBRecoveryStatus.Text = "Flashing recovery...";
-                Fastboot.Instance().Flash(IDDevicePartition.RECOVERY, "./Data/Recoveries/Recovery1.img");
-
-                App.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    tBRecoveryStatus.Text = "Rebooting...";
-                    Fastboot.Instance().Reboot(IDBoot.REBOOT);
-                });
-            }
+            RVersion rec = new RVersion();
+            rec.ShowDialog();
         }
 
         private void btnFlashRecovery2_Click(object sender, RoutedEventArgs e)
         {
-            if (ADB.Instance().GetState() == IDDeviceState.DEVICE)
-            {
-                MessageBoxResult messageResult = MessageBox.Show("Your phone needs to be in 'fastboot USB' mode. Would you like to reboot into it now?", "Reboot to bootloader required!", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (messageResult == MessageBoxResult.Yes)
-                {
-                    tBRecoveryStatus.Text = "Rebooting into Bootloader...";
-                    ADB.Instance().Reboot(IDBoot.BOOTLOADER);
-                    tBRootStatus.Text = "Waiting for device...";
+            ToolkitM9.RVersion.Settings.Recovery = "2";
 
-                    Task.Delay(10000).ContinueWith(_ =>
-                    {
-                        tBRecoveryStatus.Text = "Flashing recovery...";
-                        Fastboot.Instance().Flash(IDDevicePartition.RECOVERY, "./Data/Recoveries/Recovery2.img");
-
-                        App.Current.Dispatcher.Invoke((Action)delegate
-                        {
-                            tBRecoveryStatus.Text = "Rebooting...";
-                            Fastboot.Instance().Reboot(IDBoot.REBOOT);
-                        });
-                    }
-                    );
-                }
-            }
-            else if (ADB.Instance().GetState() == IDDeviceState.FASTBOOT)
-            {
-                tBRecoveryStatus.Text = "Flashing recovery...";
-                Fastboot.Instance().Flash(IDDevicePartition.RECOVERY, "./Data/Recoveries/Recovery2.img");
-
-                App.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    tBRecoveryStatus.Text = "Rebooting...";
-                    Fastboot.Instance().Reboot(IDBoot.REBOOT);
-                });
-            }
+            RVersion rec = new RVersion();
+            rec.ShowDialog();       
         }
 
         private void muiDrivers_Click(object sender, RoutedEventArgs e)
@@ -711,13 +578,13 @@ namespace ToolkitM9
 
                     case "Reboot":
                         {
-                            Fastboot.Instance().Reboot(IDBoot.REBOOT);
+                            this.Add(Fastboot.Instance().Reboot(IDBoot.REBOOT));
                         }
                         break;
 
                     case "Reboot Bootloader":
                         {
-                            Fastboot.Instance().Reboot(IDBoot.BOOTLOADER);
+                            this.Add(Fastboot.Instance().Reboot(IDBoot.BOOTLOADER));
                         }
                         break;
                 }
@@ -742,19 +609,19 @@ namespace ToolkitM9
                 {
                     case "Reboot":
                         {
-                            ADB.Instance().Reboot(IDBoot.REBOOT);
+                            this.Add(ADB.Instance().Reboot(IDBoot.REBOOT));
                         }
                         break;
 
                     case "Reboot Bootloader":
                         {
-                            ADB.Instance().Reboot(IDBoot.BOOTLOADER);
+                            this.Add(ADB.Instance().Reboot(IDBoot.BOOTLOADER));
                         }
                         break;
 
                     case "Reboot Recovery":
                         {
-                            ADB.Instance().Reboot(IDBoot.RECOVERY);
+                            this.Add(ADB.Instance().Reboot(IDBoot.RECOVERY));
                         }
                         break;
 
@@ -774,7 +641,7 @@ namespace ToolkitM9
                         }
                         break;
 
-                    case "Boot":
+                    case "Pull":
                         {
                             ToolkitM9.ADBSelector.Settings.Selector = "Pull";
                             var adbsel = new ADBSelector();
@@ -794,5 +661,17 @@ namespace ToolkitM9
                 file.Close();
             }
         }
+
+        private void outClear_Click(object sender, RoutedEventArgs e)
+        {
+            this.Clear();
+        }
+
+        private void btnUnlockBL_Click(object sender, RoutedEventArgs e)
+        {
+            UnlockBootloader ulbl = new UnlockBootloader();
+            ulbl.ShowDialog();
+        }
+
     }
 }

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Threading;
 using System.IO;
+using System.Xml.Linq;
 
 using AndroidCtrl;
 using AndroidCtrl.ADB;
@@ -39,7 +40,7 @@ namespace ToolkitM9
         {
             try
             {
-                string[] neededDirectories = new string[] { "Data/", "Data/Installers", "Data/Logs", "Data/Recoveries" };
+                string[] neededDirectories = new string[] { "Data/", "Data/Installers", "Data/Logs", "Data/Recoveries", "Data/Config" };
 
                 foreach (string dir in neededDirectories)
                 {
@@ -48,6 +49,12 @@ namespace ToolkitM9
                         Directory.CreateDirectory(dir);
                     }
                 }
+
+                if (!File.Exists("./Data/Config/Device.cfg"))
+                {
+                    File.Create("./Data/Config/Device.cfg");
+                }
+
             }
             catch (Exception ex)
             {
@@ -73,7 +80,6 @@ namespace ToolkitM9
 
             try
             {
-
                 if (Properties.Settings.Default["Device"].ToString() == "None")
                 {
                     MessageBox.Show("Please select your device on the next screen.", "No device selected", MessageBoxButton.OK, MessageBoxImage.Information);

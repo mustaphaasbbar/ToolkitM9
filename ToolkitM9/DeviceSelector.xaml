@@ -5,12 +5,13 @@
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please select your device:" VerticalAlignment="Top"/>
         <ComboBox x:Name="Selector" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="229" Height="27" SelectedIndex="0">
-            <ComboBoxItem Content="AT&amp;T, International GSM"/>
+            <ComboBoxItem Content="GSM"/>
+            <ComboBoxItem Content="AT&amp;T"/>
             <ComboBoxItem Content="Sprint"/>
             <ComboBoxItem Content="T-Mobile"/>
             <ComboBoxItem Content="Verizon"/>
         </ComboBox>
-        <Button x:Name="btnOK" Content="Select" HorizontalAlignment="Left" Margin="164,63,0,0" VerticalAlignment="Top" Width="75" Click="btnOK_Click"/>
+        <Button x:Name="btnOK" Content="Select" HorizontalAlignment="Left" Margin="164,63,0,0" VerticalAlignment="Top" Width="75" Click="btnOK_Click" Height="23"/>
 
     </Grid>
 </Window>
